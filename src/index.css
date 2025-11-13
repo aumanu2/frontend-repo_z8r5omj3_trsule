@@ -2,63 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-geist: 'Geist', system-ui, sans-serif;
-    --font-geist-mono: 'Geist Mono', monospace;
-    --font-mona: 'Mona Sans', system-ui, sans-serif;
-    --font-ibm-plex: 'IBM Plex Sans', system-ui, sans-serif;
-    --font-manrope: 'Manrope', system-ui, sans-serif;
-  }
+:root { color-scheme: dark; }
+html, body, #root { height: 100%; }
+body { background: #06070A; }
 
-  html { font-family: var(--font-sans); font-feature-settings: 'rlig' 1, 'calt' 1; }
-  body { @apply antialiased bg-[#06070A]; }
-}
+/* Neon / glow utilities */
+.card-holo { border: 1px solid rgba(255,255,255,0.08); background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); backdrop-filter: blur(14px); box-shadow: 0 0 0 1px rgba(255,255,255,0.02) inset, 0 20px 60px rgba(0, 255, 255, 0.06), 0 0 30px rgba(217, 70, 239, 0.08); }
+.input-neon { caret-color: #22d3ee; text-shadow: 0 0 20px rgba(34,211,238,0.4); }
+.blur-move { filter: blur(0.4px) saturate(1.2); }
+.scanlines { position: relative; }
+.scanlines::after { content:""; position:absolute; inset:0; background-image: repeating-linear-gradient( to bottom, rgba(255,255,255,0.04) 0, rgba(255,255,255,0.04) 1px, transparent 3px, transparent 6px ); pointer-events:none; mix-blend-mode: overlay; }
 
-/* Futuristic base effects */
-@layer utilities {
-  .animate-in { animation-name: animateIn; animation-duration: 350ms; }
-  .animate-out { animation-name: animateOut; animation-duration: 350ms; }
+/* Hover distortion */
+.distort { transition: transform 0.25s ease, filter 0.25s ease; }
+.distort:hover { transform: perspective(800px) rotateX(8deg) rotateY(-8deg) translateZ(8px); filter: drop-shadow(0 10px 20px rgba(34,211,238,0.25)) drop-shadow(0 0 30px rgba(217,70,239,0.2)); }
 
-  /* Motion blur on transitions */
-  .blur-move { filter: url('#blur'); }
-}
-
-/* Holographic outline on hover */
-.card-holo {
-  position: relative;
-}
-.card-holo::before {
-  content: '';
-  position: absolute; inset: -1px;
-  border-radius: 16px;
-  padding: 1px; /* holographic rim */
-  background: conic-gradient(from 0deg, rgba(34,211,238,.45), rgba(217,70,239,.45), rgba(16,185,129,.45), rgba(34,211,238,.45));
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor; mask-composite: exclude;
-  opacity: .35; filter: blur(6px);
-  transition: opacity .3s ease;
-}
-.card-holo:hover::before { opacity: .8; }
-
-/* Typing caret lights */
-@keyframes caretPulse { 0%,100%{ box-shadow: 0 0 0 rgba(34,211,238,0);} 50%{ box-shadow: 0 0 12px rgba(34,211,238,.7);} }
-.input-neon { border-color: rgba(255,255,255,.1); background: rgba(0,0,0,.35); color: #cffafe; }
-.input-neon:focus { outline: none; border-color: rgba(34,211,238,.5); box-shadow: 0 0 24px rgba(34,211,238,.35); }
-
-/* Hover distortion (css only) */
-.distort:hover { transform: perspective(800px) rotateX(6deg) rotateY(-6deg) translateY(-2px); }
-
-/* Pixel burst effect placeholder using radial gradients */
-.badge-burst {
-  position: relative; overflow: hidden;
-}
-.badge-burst::after {
-  content: '';
-  position: absolute; inset: -40%; border-radius: 9999px;
-  background: radial-gradient(circle at center, rgba(236,72,153,.25), transparent 60%), radial-gradient(circle at 30% 40%, rgba(34,211,238,.2), transparent 60%);
-  animation: burst 1s ease-out forwards; opacity: 0; pointer-events: none;
-}
-.badge-burst:active::after { opacity: 1; }
-@keyframes burst { from { transform: scale(.6); opacity: 1;} to { transform: scale(1.2); opacity: 0;} }
+/* Badge burst */
+@keyframes burst { 0%{ box-shadow: 0 0 0 0 rgba(59,130,246,0.6), 0 0 0 0 rgba(34,197,94,0.6) } 100%{ box-shadow: 0 0 0 20px rgba(59,130,246,0), 0 0 0 32px rgba(34,197,94,0) } }
+.badge-burst:active { animation: burst 600ms ease-out; }
