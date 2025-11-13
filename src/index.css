@@ -12,35 +12,53 @@
     --font-manrope: 'Manrope', system-ui, sans-serif;
   }
 
-  html {
-    font-family: var(--font-sans);
-    font-feature-settings: "rlig" 1, "calt" 1;
-  }
-
-  body {
-    @apply antialiased;
-  }
+  html { font-family: var(--font-sans); font-feature-settings: 'rlig' 1, 'calt' 1; }
+  body { @apply antialiased bg-[#06070A]; }
 }
 
-/* Custom utility classes for shadcn/ui patterns */
+/* Futuristic base effects */
 @layer utilities {
-  .animate-in {
-    animation-name: animateIn;
-    animation-duration: 350ms;
-    --tw-enter-opacity: initial;
-    --tw-enter-scale: initial;
-    --tw-enter-rotate: initial;
-    --tw-enter-translate-x: initial;
-    --tw-enter-translate-y: initial;
-  }
+  .animate-in { animation-name: animateIn; animation-duration: 350ms; }
+  .animate-out { animation-name: animateOut; animation-duration: 350ms; }
 
-  .animate-out {
-    animation-name: animateOut;
-    animation-duration: 350ms;
-    --tw-exit-opacity: initial;
-    --tw-exit-scale: initial;
-    --tw-exit-rotate: initial;
-    --tw-exit-translate-x: initial;
-    --tw-exit-translate-y: initial;
-  }
+  /* Motion blur on transitions */
+  .blur-move { filter: url('#blur'); }
 }
+
+/* Holographic outline on hover */
+.card-holo {
+  position: relative;
+}
+.card-holo::before {
+  content: '';
+  position: absolute; inset: -1px;
+  border-radius: 16px;
+  padding: 1px; /* holographic rim */
+  background: conic-gradient(from 0deg, rgba(34,211,238,.45), rgba(217,70,239,.45), rgba(16,185,129,.45), rgba(34,211,238,.45));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  opacity: .35; filter: blur(6px);
+  transition: opacity .3s ease;
+}
+.card-holo:hover::before { opacity: .8; }
+
+/* Typing caret lights */
+@keyframes caretPulse { 0%,100%{ box-shadow: 0 0 0 rgba(34,211,238,0);} 50%{ box-shadow: 0 0 12px rgba(34,211,238,.7);} }
+.input-neon { border-color: rgba(255,255,255,.1); background: rgba(0,0,0,.35); color: #cffafe; }
+.input-neon:focus { outline: none; border-color: rgba(34,211,238,.5); box-shadow: 0 0 24px rgba(34,211,238,.35); }
+
+/* Hover distortion (css only) */
+.distort:hover { transform: perspective(800px) rotateX(6deg) rotateY(-6deg) translateY(-2px); }
+
+/* Pixel burst effect placeholder using radial gradients */
+.badge-burst {
+  position: relative; overflow: hidden;
+}
+.badge-burst::after {
+  content: '';
+  position: absolute; inset: -40%; border-radius: 9999px;
+  background: radial-gradient(circle at center, rgba(236,72,153,.25), transparent 60%), radial-gradient(circle at 30% 40%, rgba(34,211,238,.2), transparent 60%);
+  animation: burst 1s ease-out forwards; opacity: 0; pointer-events: none;
+}
+.badge-burst:active::after { opacity: 1; }
+@keyframes burst { from { transform: scale(.6); opacity: 1;} to { transform: scale(1.2); opacity: 0;} }
